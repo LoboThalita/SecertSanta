@@ -44,7 +44,8 @@ namespace SecretSanta.Forms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //Ir para formulário de Criação de conta
+            FmCreateAccount frm = new FmCreateAccount();
+            frm.Show();
         }
     }
 }
