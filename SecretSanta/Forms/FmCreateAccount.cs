@@ -1,19 +1,35 @@
-﻿using System.Text.RegularExpressions;
+﻿using SecretSanta.Domain.Entities;
+using SecretSanta.Domain.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace SecretSanta.Forms
 {
     public partial class FmCreateAccount : Form
     {
-        public FmCreateAccount()
+        private readonly ICreateAccountService _createAccountService;
+        public FmCreateAccount(ICreateAccountService createAccountService)
         {
             InitializeComponent();
+            _createAccountService = createAccountService;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             if (ValidFields())
             {
-                MessageBox.Show("tudo Ok");
+                var client = new Client()
+                {
+                    Name = txtName.Text,
+                    Email = txtEmail.Text,
+                    Password = txtPassword.Text
+                };
+
+                var result = _createAccountService.CreateNewAccount(client);
+
+                if(result) MessageBox.Show("Conta Criada com sucesso");
+
+                var form = this;
+                form.Close();
             }
         }
 
@@ -50,7 +66,7 @@ namespace SecretSanta.Forms
                 txtErrorMessage.Visible = false;
             }
 
-            
+            //Verificar se email já exite
 
             return allValid;
         }

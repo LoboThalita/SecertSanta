@@ -1,19 +1,36 @@
+using Microsoft.Extensions.DependencyInjection;
+using SecretSanta;
+using SecretSanta.Domain.Interfaces;
 using SecretSanta.Forms;
+using SecretSanta.Service;
 
-namespace SecretSanta
+internal static class Program
 {
-    internal static class Program
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new FmLogin());
-        }
+        var serviceCollection = new ServiceCollection();
+        ConfigureServices(serviceCollection);
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        ApplicationConfiguration.Initialize();
+        Application.Run(serviceProvider.GetRequiredService<FmLogin>());
+    }
+
+    private static void ConfigureServices(IServiceCollection services)
+    {
+        //Inversions
+        services.AddTransient<ICreateAccountService, CreateAccountService>();
+
+        //Forms
+        services.AddTransient<FmLogin>();
+        services.AddTransient<FmCreateAccount>();
+        services.AddTransient<FmGameList>();
+        services.AddTransient<FmNameList>();
+        services.AddTransient<FmInitial>();
     }
 }

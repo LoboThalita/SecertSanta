@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,11 @@ namespace SecretSanta.Forms
 {
     public partial class FmLogin : Form
     {
-        public FmLogin()
+        private readonly IServiceProvider serviceProvider;
+        public FmLogin(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            this.serviceProvider = serviceProvider;
         }
 
         private void btnTogglePassword_Click(object sender, EventArgs e)
@@ -44,7 +47,7 @@ namespace SecretSanta.Forms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            FmCreateAccount frm = new FmCreateAccount();
+            var frm = serviceProvider.GetRequiredService<FmCreateAccount>();
             frm.Show();
         }
     }
